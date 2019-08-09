@@ -118,12 +118,13 @@ app.get('/getfiles', function (req, res, next) {
 			console.log(err);
 			winston.error("Error occured while inserting data " + err);
 		})
-		// res.status(200).json({"status":true,"data":[{"_id":"5d4d7ec4f79ff63efc511b82","file_name":"abc1.json"},{"_id":"5d4d7fc907f29b3cec1151e1","file_name":"abc1.json"},{"_id":"5d4d7fd507f29b3cec1151e2","file_name":"abc1.json"},{"_id":"5d4d7fd507f29b3cec1151e3","file_name":"abc1.json"},{"_id":"5d4d81591f98ab3c340436b5","file_name":"abc1.json"},{"_id":"5d4d82c0166ef0113cdc57c1","file_name":"THERM0001.json"}]})
 })
 
 app.post('/getfileinfo', jsonParser, function (req, res, next) {
+	console.log(req.body._id)
 	FileModel.findOne({ _id: req.body._id })
 		.then(async resData => {
+			console.log(resData)
 			let response = {
 				"status": true,
 				"data": [resData]

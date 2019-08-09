@@ -13,6 +13,7 @@ import Title from './Title';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
+import Api from './callApi'
 
 function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
@@ -29,28 +30,29 @@ class Dashboard extends React.Component {
         }
     }
 
-    setLoadingMode() {
-        this.setState({ loading: true })
+    setStateData = (isloading= false, val, data) => {
+        if(isloading) {
+            this.setState({ loading: true })
+        } else {
+            this.setState({[val]: data, loading: false})            
+        }
+    }
+
+    callApi(api, val, type='get', body=undefined, isBolb=false) {
+        this.setStateData(true)
+        Api(api, type, body, isBolb).then(response => {
+            if(response.status) {
+                this.setStateData(false, val, response.data)
+                api == '/files' && this.callApi('/getfiles', 'saveFiles')
+            }
+        }).catch(err => {
+            this.setState({ loading: false })
+            window.alert('Server error API-> ' + api)
+        })
     }
 
     componentDidMount() {
-        this.setLoadingMode()
-        axios.get(`/getfiles`)
-            .then(response => {
-                return JSON.stringify(response.data)
-                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
-            })
-            .then(data => {
-                console.log("response==>", data)
-                let resData = JSON.parse(data)
-                if (resData.status) {
-                    this.setState({ saveFiles: resData.data, loading: false })
-                }
-            })
-            .catch(err => {
-                this.setState({ loading: false })
-                window.alert('Error uploading files')
-            })
+        this.callApi('/getfiles', 'saveFiles')
     }
 
     onFilesChange = (files) => {
@@ -75,69 +77,21 @@ class Dashboard extends React.Component {
     }
 
     filesUpload = () => {
-        this.setLoadingMode()
+        this.setStateData(true)
         const formData = new FormData()
         Object.keys(this.state.files).forEach((key) => {
             const file = this.state.files[key]
             formData.append(key, new Blob([file], { type: file.type }), file.name || 'file')
         })
-
-        axios.post(`/files`, formData)
-            .then(response => {
-                return JSON.stringify(response.data)
-                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
-            })
-            .then(data => {
-                console.log("response", data)
-                let resData = JSON.parse(data)
-                if (resData.status) {
-                    this.setState({ resData: resData.data, loading: false })
-                }
-            })
-            .catch(err => {
-                this.setState({ loading: false })
-                window.alert('Error uploading files')
-            })
+        this.callApi('/files', 'resData', 'POST', formData, true)
     }
 
     getFileDetails(body) {
-        this.setLoadingMode()
-        axios.post(`/getfileinfo`, body)
-            .then(response => {
-                return JSON.stringify(response.data)
-                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
-            })
-            .then(data => {
-                console.log("response", data)
-                let resData = JSON.parse(data)
-                if (resData.status) {
-                    this.setState({ resData: resData.data, loading: false })
-                }
-            })
-            .catch(err => {
-                this.setState({ loading: false })
-                window.alert('Error uploading files')
-            })
+        this.callApi('/getfileinfo', 'resData', 'POST', body)
     }
 
     deleteFiles = () => {
-        this.setState({loading: true})
-        axios.get(`/deleteAll`)
-            .then(response => {
-                return JSON.stringify(response.data)
-                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
-            })
-            .then(data => {
-                console.log("response", data)
-                let resData = JSON.parse(data)
-                if (resData.status) {
-                    this.setState({ saveFiles: [], loading: false })
-                }
-            })
-            .catch(err => {
-                this.setState({ loading: false })
-                window.alert('Error uploading files')
-            })
+        this.callApi('/deleteAll', 'resData', 'POST', body)
     }
 
     render() {
@@ -158,7 +112,7 @@ class Dashboard extends React.Component {
                 ) : (
                         <>
                             <Grid item xs={12} md={col} lg={col}>
-                                <Paper className={this.props.fixedHeightPaper}>
+                                <Paper className={this.props.fixedHeightPaper} style={!(hasFiles && hasSavedFiles)? {height: "100%"}: null}>
                                     <Title>Drop Zone</Title>
                                     <Files
                                         ref='files'
