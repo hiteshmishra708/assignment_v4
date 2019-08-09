@@ -33,16 +33,16 @@ class Graphs extends React.Component {
             data[lsKey] = element.val
         });
         console.log(data)
-        let title = "Type - " + this.props.type + " Chart " + "File - " + this.props.fileData.file
+        let title = "Type - " + this.props.type + " Chart " + "File - " + this.props.fileData.file_name
         return (
             <React.Fragment>
                 <Title>{title}</Title>
                 <Table size="small">
                     <TableBody>
                         {this.props.type == "Line" ? (
-                            <LineChart data={this.props.fileData.rows} />
+                            <LineChart data={this.props.fileData.data} />
                         ) : (
-                                <AreaChart data={this.props.fileData.rows} />
+                                <AreaChart data={this.props.fileData.data} />
                             )}
                     </TableBody>
                 </Table>

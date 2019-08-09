@@ -137,6 +137,10 @@
   margin-right: 5px !important;
 }
 
-.makeStyles-fixedHeight-10 {
+.makeStyles-paper-9 {
   height: 100% !important
+}
+
+.savedFiles {
+  height: 240px !important;
 }

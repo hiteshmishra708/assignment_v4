@@ -74,7 +74,12 @@
   "dependencies": {
     "@material-ui/core": "^4.3.0",
     "@material-ui/icons": "^4.2.1",
+    "app-root-path": "^2.2.1",
+    "body-parser": "^1.19.0",
     "chart.js": "^2.8.0",
-    "react-chartkick": "^0.3.2"
+    "compressing": "^1.4.0",
+    "mongoose": "^5.6.9",
+    "react-chartkick": "^0.3.2",
+    "winston": "^3.2.1"
   }
 }

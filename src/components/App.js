@@ -22,8 +22,8 @@ function MadeWithLove() {
 				React.js
       </Link>
 			{' and '}
-			<Link color="inherit" href="https://material-ui.com/">
-				Material-UI
+			<Link color="inherit" href="https://www.mongodb.com/">
+				MongoDB
       </Link>
 		</Typography>
 	);

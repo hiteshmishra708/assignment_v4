@@ -10,15 +10,47 @@ import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Files from '../'
 import Title from './Title';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
 
+function ListItemLink(props) {
+    return <ListItem button component="a" {...props} />;
+}
+  
 class Dashboard extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             files: [],
             resData: [],
-            loading: false
+            loading: false,
+            saveFiles: []
         }
+    }
+
+    setLoadingMode() {
+        this.setState({ loading: true })
+    }
+
+    componentDidMount() {
+        this.setLoadingMode()
+        axios.get(`/getfiles`)
+            .then(response => {
+                return JSON.stringify(response.data)
+                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
+            })
+            .then(data => {
+                console.log("response==>", data)
+                let resData = JSON.parse(data)
+                if (resData.status) {
+                    this.setState({ saveFiles: resData.data, loading: false })
+                }
+            })
+            .catch(err => {
+                this.setState({ loading: false })
+                window.alert('Error uploading files')
+            })
     }
 
     onFilesChange = (files) => {
@@ -43,7 +75,7 @@ class Dashboard extends React.Component {
     }
 
     filesUpload = () => {
-        this.setState({ loading: true })
+        this.setLoadingMode()
         const formData = new FormData()
         Object.keys(this.state.files).forEach((key) => {
             const file = this.state.files[key]
@@ -67,6 +99,47 @@ class Dashboard extends React.Component {
                 window.alert('Error uploading files')
             })
     }
+
+    getFileDetails(body) {
+        this.setLoadingMode()
+        axios.post(`/getfileinfo`, body)
+            .then(response => {
+                return JSON.stringify(response.data)
+                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
+            })
+            .then(data => {
+                console.log("response", data)
+                let resData = JSON.parse(data)
+                if (resData.status) {
+                    this.setState({ resData: resData.data, loading: false })
+                }
+            })
+            .catch(err => {
+                this.setState({ loading: false })
+                window.alert('Error uploading files')
+            })
+    }
+
+    deleteFiles = () => {
+        this.setState({loading: true})
+        axios.get(`/deleteAll`)
+            .then(response => {
+                return JSON.stringify(response.data)
+                // window.alert(`${this.state.files.length} files uploaded succesfully!`)
+            })
+            .then(data => {
+                console.log("response", data)
+                let resData = JSON.parse(data)
+                if (resData.status) {
+                    this.setState({ saveFiles: [], loading: false })
+                }
+            })
+            .catch(err => {
+                this.setState({ loading: false })
+                window.alert('Error uploading files')
+            })
+    }
+
     render() {
         const classes = makeStyles(theme => ({
             progress: {
@@ -74,6 +147,8 @@ class Dashboard extends React.Component {
             },
         }));
         let hasFiles = this.state.files.length > 0
+        let hasSavedFiles = this.state.saveFiles.length > 0
+        let col = hasFiles ? 4 : (hasSavedFiles? 8: 12)
         return (
             <>
                 {this.state.loading ? (
@@ -82,7 +157,7 @@ class Dashboard extends React.Component {
                     />
                 ) : (
                         <>
-                            <Grid item xs={12} md={hasFiles ? 8 : 12} lg={hasFiles ? 8 : 12}>
+                            <Grid item xs={12} md={col} lg={col}>
                                 <Paper className={this.props.fixedHeightPaper}>
                                     <Title>Drop Zone</Title>
                                     <Files
@@ -109,6 +184,23 @@ class Dashboard extends React.Component {
                                             filesRemoveAll={this.filesRemoveAll}
                                             filesRemoveOne={this.filesRemoveOne.bind(this)}
                                         />
+                                    </Paper>
+                                </Grid>
+                            )}
+                            {this.state.saveFiles.length > 0 && (
+                                <Grid item xs={12} md={4} lg={4}>
+                                    <Paper className={this.props.fixedHeightPaper}>
+                                        <Title>Saved Files</Title>
+                                        <Button variant="contained" color="primary" className={classes.button} onClick={this.deleteFiles}>
+                                            Delete all saved files
+                                        </Button>
+                                            {this.state.saveFiles.map((value, idx) => {
+                                                return (
+                                                    <ListItemLink key={idx} onClick={() => this.getFileDetails(value)}>
+                                                        <ListItemText primary={value.file_name} />
+                                                    </ListItemLink>
+                                                )
+                                            })}
                                     </Paper>
                                 </Grid>
                             )}

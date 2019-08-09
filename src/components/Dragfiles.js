@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Button from '@material-ui/core/Button';
 
-class Dragzone extends React.Component {
+class Dragfiles extends React.Component {
 	constructor(props) {
 		super(props)
 	}
@@ -68,4 +68,4 @@ class Dragzone extends React.Component {
 	}
 }
 
-export default Dragzone;
+export default Dragfiles;
