@@ -32,7 +32,16 @@
   "peerDependencies": {
     "react": "^15.0.0 || ^16"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@material-ui/core": "^4.3.0",
+    "@material-ui/icons": "^4.2.1",
+    "app-root-path": "^2.2.1",
+    "body-parser": "^1.19.0",
+    "chart.js": "^2.8.0",
+    "compressing": "^1.4.0",
+    "mongoose": "^5.6.9",
+    "react-chartkick": "^0.3.2",
+    "winston": "^3.2.1",
     "@babel/core": "7.0.0-beta.44",
     "@babel/preset-env": "7.0.0-beta.44",
     "@babel/preset-react": "7.0.0-beta.44",
@@ -69,16 +78,5 @@
     "webpack-cli": "2.0.13",
     "webpack-dev-middleware": "3.1.0",
     "webpack-hot-middleware": "2.21.2"
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.3.0",
-    "@material-ui/icons": "^4.2.1",
-    "app-root-path": "^2.2.1",
-    "body-parser": "^1.19.0",
-    "chart.js": "^2.8.0",
-    "compressing": "^1.4.0",
-    "mongoose": "^5.6.9",
-    "react-chartkick": "^0.3.2",
-    "winston": "^3.2.1"
   }
 }

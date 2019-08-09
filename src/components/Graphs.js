@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Blob from 'blob'
 import FormData from 'form-data'
 import React from 'react'

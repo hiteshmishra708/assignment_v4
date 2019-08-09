@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Blob from 'blob'
 import FormData from 'form-data'
 import React from 'react'
@@ -91,7 +90,7 @@ class Dashboard extends React.Component {
     }
 
     deleteFiles = () => {
-        this.callApi('/deleteAll', 'resData', 'POST', body)
+        this.callApi('/deleteAll', 'saveFiles')
     }
 
     render() {

@@ -69,7 +69,7 @@ async function saveFileData(fileObj) {
 		})
 		.catch(err => {
 			console.log(err);
-			winston.error("Error occured while inserting data " + err);
+			winston.error('Error occured while inserting data ' + err);
 		})
 }
 
@@ -91,32 +91,32 @@ app.post('/files', upload.any(), async function (req, res, next) {
 				let lsKey = new Date(element.ts).toISOString().slice(0, 10)
 				fileObj.data[lsKey] = element.val
 			});
-			fileObj["data"] = fileObj.data
+			fileObj['data'] = fileObj.data
 			saveFileData(fileObj)
 		} catch (ex) {
-			fileObj["msg"] = "failed to read records"
+			fileObj['msg'] = 'failed to read records'
 		}
 		resData.push(fileObj)
 	})
 	let response = {
-		"status": true,
-		"data": resData
+		'status': true,
+		'data': resData
 	}
 	res.status(200).json(response)
 })
 
 app.get('/getfiles', function (req, res, next) {
-	FileModel.find({}).select({ "file_name": 1, "_id": 1})
+	FileModel.find({}).select({ 'file_name': 1, '_id': 1})
 		.then(async resData => {
 			let response = {
-				"status": true,
-				"data": resData
+				'status': true,
+				'data': resData
 			}
 			res.status(200).json(response)
 		})
 		.catch(err => {
 			console.log(err);
-			winston.error("Error occured while inserting data " + err);
+			winston.error('Error occured while inserting data ' + err);
 		})
 })
 
@@ -126,30 +126,30 @@ app.post('/getfileinfo', jsonParser, function (req, res, next) {
 		.then(async resData => {
 			console.log(resData)
 			let response = {
-				"status": true,
-				"data": [resData]
+				'status': true,
+				'data': [resData]
 			}
 			res.status(200).json(response)
 		})
 		.catch(err => {
 			console.log(err);
-			winston.error("Error occured while geting the file info " + err);
+			winston.error('Error occured while geting the file info ' + err);
 		})
 })
 
 app.post('/filesearch', function (req, res, next) {
-	let filename = "Est"
+	let filename = 'Est'
 	FileModel.find({ file_name: { $regex: `^${filename}`, $options: 'i' } })
 		.then(async resData => {
 			let response = {
-				"status": true,
-				"data": resData
+				'status': true,
+				'data': resData
 			}
 			res.status(200).json(response)
 		})
 		.catch(err => {
 			console.log(err);
-			winston.error("Error occured while inserting data " + err);
+			winston.error('Error occured while inserting data ' + err);
 		})
 })
 
@@ -157,17 +157,17 @@ app.get('/deleteAll', function (req, res, next) {
 	FileModel.remove()
 		.then(async resData => {
 			let response = {
-				"status": true,
-				"data": resData
+				'status': true,
+				'data': []
 			}
 			res.status(200).json(response)
 		})
 		.catch(err => {
 			console.log(err);
-			winston.error("Error occured while inserting data " + err);
+			winston.error('Error occured while inserting data ' + err);
 		})
 })
 
-app.listen(8080, function () {
-	console.log(`Starting react-files demo on port 8080`)
+app.listen(80, '0.0.0.0', function () {
+	console.log('Starting react-files demo on port 80')
 })
