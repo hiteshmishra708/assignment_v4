@@ -39,9 +39,9 @@ class Graphs extends React.Component {
                 <Table size="small">
                     <TableBody>
                         {this.props.type == "Line" ? (
-                            <LineChart data={this.props.fileData.data} />
+                            <LineChart data={this.props.fileData.data} xtitle="Time" ytitle="Value" download={{background: "#fff"}} messages={{empty: "No data"}}  />
                         ) : (
-                                <AreaChart data={this.props.fileData.data} />
+                                <AreaChart data={this.props.fileData.data} xtitle="Time" ytitle="Value" download={{background: "#fff"}} messages={{empty: "No data"}}  />
                             )}
                     </TableBody>
                 </Table>

@@ -80,6 +80,9 @@ class Dashboard extends React.Component {
         const formData = new FormData()
         Object.keys(this.state.files).forEach((key) => {
             const file = this.state.files[key]
+            console.log(file)
+            var path = (window.URL || window.webkitURL).createObjectURL(file);
+            console.log(path)
             formData.append(key, new Blob([file], { type: file.type }), file.name || 'file')
         })
         this.callApi('/files', 'resData', 'POST', formData, true)

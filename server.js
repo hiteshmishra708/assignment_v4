@@ -15,6 +15,24 @@ async function connectDB() {
 		console.log(error);
 	}
 }
+
+async function isValidTimeStamp() {
+	try {
+		let check = await mongoose.connect(Constants.dburl, { useNewUrlParser: true });
+		console.log(check);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function isValidValue(element, key) {
+	try {
+		console.log
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 connectDB();
 
 const FileModel = require('./models/index');
@@ -88,11 +106,19 @@ app.post('/files', upload.any(), async function (req, res, next) {
 			let data = fs.readFileSync(fileObj.file_path);
 			let records = JSON.parse(data);
 			records.forEach(element => {
-				let lsKey = new Date(element.ts).toISOString().slice(0, 10)
-				fileObj.data[lsKey] = element.val
+				let keys = Object.keys(element)
+				let tsKey = null, valKey = null;
+				keys.forEach(key => {
+					if(!tsKey) tsKey = isValidTimeStamp(element, key)
+					else if(!valKey) valKey = isValidValue(element, key)
+				});
+				console.log(tsKey, valKey)
+				console.log(Object.keys(element))
+				// let lsKey = new Date(element.ts).toISOString().slice(0, 10)
+				// fileObj.data[lsKey] = element.val
 			});
-			fileObj['data'] = fileObj.data
-			saveFileData(fileObj)
+			// fileObj['data'] = fileObj.data
+			// saveFileData(fileObj)
 		} catch (ex) {
 			fileObj['msg'] = 'failed to read records'
 		}
@@ -134,22 +160,6 @@ app.post('/getfileinfo', jsonParser, function (req, res, next) {
 		.catch(err => {
 			console.log(err);
 			winston.error('Error occured while geting the file info ' + err);
-		})
-})
-
-app.post('/filesearch', function (req, res, next) {
-	let filename = 'Est'
-	FileModel.find({ file_name: { $regex: `^${filename}`, $options: 'i' } })
-		.then(async resData => {
-			let response = {
-				'status': true,
-				'data': resData
-			}
-			res.status(200).json(response)
-		})
-		.catch(err => {
-			console.log(err);
-			winston.error('Error occured while inserting data ' + err);
 		})
 })
 

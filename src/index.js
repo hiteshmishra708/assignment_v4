@@ -214,7 +214,8 @@ class Files extends React.Component {
 			ref: (element) => {
 				this.inputElement = element
 			},
-			onChange: this.onDrop
+			onChange: this.onDrop,
+			accept: "application/json"
 		}
 
 		return (
