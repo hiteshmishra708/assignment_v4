@@ -88,7 +88,7 @@ export default function App() {
 			<AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
 				<Toolbar className={classes.toolbar}>
 					<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-					React
+					Assignment
           </Typography>
 				</Toolbar>
 			</AppBar>

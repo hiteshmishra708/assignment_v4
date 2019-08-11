@@ -93,7 +93,6 @@ app.post('/files', upload.any(), async function (req, res, next) {
 			records.forEach(element => {
 				if(!(tsKey || valKey)) {
 					Object.keys(element).forEach(key => {
-						console.log("...................checking keys....................")
 						if (!tsKey) tsKey = validation.isValidTimeStamp(element, key)? key: null
 						if (!valKey) valKey = validation.isValidValue(element, key)? key: null
 					});
