@@ -46,7 +46,6 @@ class Dashboard extends React.Component {
                 api == '/files' && this.callApi('/getfiles', 'saveFiles')
             }
         }).catch(err => {
-            console.log("Server error API-> "+ err)
             this.setState({ loading: false })
             window.alert('Server error API-> ' + api)
         })
@@ -181,7 +180,7 @@ class Dashboard extends React.Component {
                                         <Grid item xs={12}>
                                             <Paper className={this.props.classes.paper}>
                                                 <Graphs fileData={value} type="Line" size={this.getFileSize(value.file_size)} />
-                                                <Graphs fileData={value} type="Area" />
+                                                <Graphs fileData={value} type="Area" size={this.getFileSize(value.file_size)} />
                                             </Paper>
                                         </Grid>
                                     </>

@@ -1,7 +1,7 @@
 Assignment
 =======================
 
-> Node.js + React.js + Material-UI
+> Node.js + React.js + Charts.js + Material-UI And MongoDB
 
 ## Installation
 
@@ -21,12 +21,15 @@ npm start
 
 Then visit http://localhost:8080/
 
+## Update MongoDB URL
+```
+vi Constant.js
+```
+
 ### Start
 
 ```
 npm start
 ```
 
-### Max File Size=> 500MB
-
-### http://ionassignment.openode.io/
+### http://35.200.132.218:3009/
