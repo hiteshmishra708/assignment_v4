@@ -6,28 +6,12 @@ var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const Constants = require('./Constant');
 const winston = require('./winstonlog')
+var validation = require('./validation')
 
 async function connectDB() {
 	try {
 		let check = await mongoose.connect(Constants.dburl, { useNewUrlParser: true });
 		console.log(check);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-async function isValidTimeStamp() {
-	try {
-		let check = await mongoose.connect(Constants.dburl, { useNewUrlParser: true });
-		console.log(check);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-async function isValidValue(element, key) {
-	try {
-		console.log
 	} catch (error) {
 		console.log(error);
 	}
@@ -105,21 +89,28 @@ app.post('/files', upload.any(), async function (req, res, next) {
 		try {
 			let data = fs.readFileSync(fileObj.file_path);
 			let records = JSON.parse(data);
+			let tsKey = null, valKey = null;
 			records.forEach(element => {
-				let keys = Object.keys(element)
-				let tsKey = null, valKey = null;
-				keys.forEach(key => {
-					if(!tsKey) tsKey = isValidTimeStamp(element, key)
-					else if(!valKey) valKey = isValidValue(element, key)
-				});
-				console.log(tsKey, valKey)
-				console.log(Object.keys(element))
-				// let lsKey = new Date(element.ts).toISOString().slice(0, 10)
-				// fileObj.data[lsKey] = element.val
+				if(!(tsKey || valKey)) {
+					Object.keys(element).forEach(key => {
+						console.log("...................checking keys....................")
+						if (!tsKey) tsKey = validation.isValidTimeStamp(element, key)? key: null
+						if (!valKey) valKey = validation.isValidValue(element, key)? key: null
+					});
+				}
+				if(tsKey && valKey) {
+					let lsKey = new Date(element[tsKey]).toISOString().slice(0, 10)
+					if(Object.keys(fileObj.data).indexOf(lsKey) == -1) {
+						fileObj.data[lsKey] = element[valKey]
+					}
+				}
 			});
-			// fileObj['data'] = fileObj.data
-			// saveFileData(fileObj)
-		} catch (ex) {
+			fileObj['data'] = fileObj.data
+			if(!tsKey) fileObj['tsKey'] = 'failed to get ts records'
+			if(!valKey) fileObj['valKey'] = 'failed to get value records'
+			saveFileData(fileObj)
+		} catch (err) {
+			winston.error("Error when extracting the data " + err)
 			fileObj['msg'] = 'failed to read records'
 		}
 		resData.push(fileObj)
@@ -144,6 +135,7 @@ app.get('/getfiles', function (req, res, next) {
 			console.log(err);
 			winston.error('Error occured while inserting data ' + err);
 		})
+	// res.status(200).json([])
 })
 
 app.post('/getfileinfo', jsonParser, function (req, res, next) {
