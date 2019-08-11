@@ -12,6 +12,7 @@ import Title from './Title';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import Api from './callApi'
 
 function ListItemLink(props) {
@@ -96,6 +97,18 @@ class Dashboard extends React.Component {
         this.callApi('/deleteAll', 'saveFiles')
     }
 
+    getFileSize(size) {
+		if (size >= 1000000000) {
+			return Math.ceil(size / 1000000000) + 'GB'
+		} else if (size >= 1000000) {
+			return Math.ceil(size / 1000000) + 'MB'
+		} else if (size >= 1000) {
+			return Math.ceil(size / 1000) + 'KB'
+		} else {
+			return Math.ceil(size) + 'B'
+		}
+	}
+
     render() {
         const classes = makeStyles(theme => ({
             progress: {
@@ -153,7 +166,10 @@ class Dashboard extends React.Component {
                                             {this.state.saveFiles.map((value, idx) => {
                                                 return (
                                                     <ListItemLink key={idx} onClick={() => this.getFileDetails(value)}>
-                                                        <ListItemText primary={value.file_name} />
+                                                        <ListItemText primary={value.file_name + " Size - " + this.getFileSize(value.file_size)} />
+                                                        <Link color="inherit" target="_blank" href={"/download/" + value.file_name}>
+                                                            View File
+                                                        </Link>
                                                     </ListItemLink>
                                                 )
                                             })}
@@ -165,7 +181,7 @@ class Dashboard extends React.Component {
                                     <>
                                         <Grid item xs={12}>
                                             <Paper className={this.props.classes.paper}>
-                                                <Graphs fileData={value} type="Line" />
+                                                <Graphs fileData={value} type="Line" getFileSize={this.getFileSize} />
                                                 <Graphs fileData={value} type="Area" />
                                             </Paper>
                                         </Grid>

@@ -58,6 +58,7 @@ app.use(webpackHotMiddleware(compiler, {
 }))
 
 app.use('/assets', express.static('assets'))
+app.use('/download', express.static('.uploads'))
 
 app.get('/', function (req, res, next) {
 	res.sendFile(path.join(__dirname + '/index.html'));
@@ -80,40 +81,46 @@ app.post('/files', upload.any(), async function (req, res, next) {
 		return next(new Error('No files uploaded'))
 	}
 	let resData = [];
-	req.files.forEach((file) => {
+	for(let j=0; j<req.files.length; j++) {
+		let file = req.files[j]
 		let fileObj = {
 			file_name: file.originalname,
 			file_path: './.uploads/' + file.originalname,
-			data: {}
+			file_size: file.size,
+			data: {}			
 		}
 		try {
 			let data = fs.readFileSync(fileObj.file_path);
 			let records = JSON.parse(data);
-			let tsKey = null, valKey = null;
-			records.forEach(element => {
-				if(!(tsKey || valKey)) {
-					Object.keys(element).forEach(key => {
-						if (!tsKey) tsKey = validation.isValidTimeStamp(element, key)? key: null
-						if (!valKey) valKey = validation.isValidValue(element, key)? key: null
-					});
-				}
-				if(tsKey && valKey) {
+			let tsKey = null, valKey = null, element = null;
+			if(records.length > 0) {
+				element = records[0]
+				Object.keys(element).forEach(key => {
+					if (!tsKey) tsKey = validation.isValidTimeStamp(element, key)? key: null
+					if (!valKey) valKey = validation.isValidValue(element, key)? key: null
+				});
+			}
+			if(tsKey && valKey) {
+				for (let i=0; i<records.length; i++) {
+					element = records[i]
 					let lsKey = new Date(element[tsKey]).toISOString().slice(0, 10)
 					if(Object.keys(fileObj.data).indexOf(lsKey) == -1) {
 						fileObj.data[lsKey] = element[valKey]
 					}
 				}
-			});
+			} else {
+				fileObj['tsKey'] = tsKey? tsKey: 'failed to get timestamp col'
+				fileObj['valKey'] = valKey? tsKey: 'failed to get value col'
+			}
 			fileObj['data'] = fileObj.data
-			if(!tsKey) fileObj['tsKey'] = 'failed to get ts records'
-			if(!valKey) fileObj['valKey'] = 'failed to get value records'
 			saveFileData(fileObj)
 		} catch (err) {
+			console.log(err)
 			winston.error("Error when extracting the data " + err)
 			fileObj['msg'] = 'failed to read records'
 		}
 		resData.push(fileObj)
-	})
+	}
 	let response = {
 		'status': true,
 		'data': resData
@@ -122,7 +129,7 @@ app.post('/files', upload.any(), async function (req, res, next) {
 })
 
 app.get('/getfiles', function (req, res, next) {
-	FileModel.find({}).select({ 'file_name': 1, '_id': 1})
+	FileModel.find({}).select({ 'file_name': 1, '_id': 1, 'file_size': 1})
 		.then(async resData => {
 			let response = {
 				'status': true,
@@ -134,7 +141,6 @@ app.get('/getfiles', function (req, res, next) {
 			console.log(err);
 			winston.error('Error occured while inserting data ' + err);
 		})
-	// res.status(200).json([])
 })
 
 app.post('/getfileinfo', jsonParser, function (req, res, next) {
@@ -169,6 +175,6 @@ app.get('/deleteAll', function (req, res, next) {
 		})
 })
 
-app.listen(80, '0.0.0.0', function () {
+app.listen(3009, function () {
 	console.log('Starting react-files demo on port 80')
 })

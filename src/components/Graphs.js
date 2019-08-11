@@ -9,6 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import Title from './Title';
 import { LineChart, AreaChart } from 'react-chartkick'
 import 'chart.js'
@@ -18,16 +19,28 @@ class Graphs extends React.Component {
         super(props)
     }
 
+    getTitle() {
+        return (
+            <Typography variant="body2" color="textSecondary" align="center">
+                <Title>
+                    {"Type - " + this.props.type + " Chart " + "File - "}
+                    <Link color="inherit" target="_blank" href={"/download/" + this.props.fileData.file_name}>
+                        {this.props.fileData.file_name}
+                    </Link>
+                </Title>
+            </Typography>
+        );
+    }
+
     render() {
         const classes = makeStyles(theme => ({
             seeMore: {
                 marginTop: theme.spacing(3),
             },
         }));
-        let title = "Type - " + this.props.type + " Chart " + "File - " + this.props.fileData.file_name
         return (
             <React.Fragment>
-                <Title>{title}</Title>
+                <Title>{this.getTitle()}</Title>
                 <Table size="small">
                     <TableBody>
                         {this.props.type == "Line" ? (

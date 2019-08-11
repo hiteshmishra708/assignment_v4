@@ -14,17 +14,25 @@ function MadeWithLove() {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
 			{'Built with '}
-			<Link color="inherit" href="https://nodejs.org">
+			<Link color="inherit" target="_blank" href="https://nodejs.org/">
 				Node.js
-      </Link>
+      		</Link>
 			{', '}
-			<Link color="inherit" href="https://reactjs.org/">
+			<Link color="inherit" target="_blank" href="https://reactjs.org/">
 				React.js
-      </Link>
+      		</Link>
+			{', '}
+			<Link color="inherit" target="_blank" href="https://www.chartjs.org/">
+				Chart.js
+      		</Link>
+			{', '}
+			<Link color="inherit" target="_blank" href="https://material-ui.com/">
+				Material-UI
+      		</Link>
 			{' and '}
-			<Link color="inherit" href="https://www.mongodb.com/">
+			<Link color="inherit" target="_blank" href="https://www.mongodb.com/">
 				MongoDB
-      </Link>
+      		</Link>
 		</Typography>
 	);
 }
