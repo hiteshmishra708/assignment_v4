@@ -144,7 +144,6 @@ app.get('/getfiles', function (req, res, next) {
 })
 
 app.post('/getfileinfo', jsonParser, function (req, res, next) {
-	console.log(req.body._id)
 	FileModel.findOne({ _id: req.body._id })
 		.then(async resData => {
 			console.log(resData)

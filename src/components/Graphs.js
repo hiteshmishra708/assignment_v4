@@ -23,9 +23,9 @@ class Graphs extends React.Component {
         return (
             <Typography variant="body2" color="textSecondary" align="center">
                 <Title>
-                    {"Type - " + this.props.type + " Chart " + "File - "}
+                    {"Type - " + this.props.type + " Chart "}
                     <Link color="inherit" target="_blank" href={"/download/" + this.props.fileData.file_name}>
-                        {this.props.fileData.file_name}
+                        {"File - " + this.props.fileData.file_name + " File Size - " + this.props.size}
                     </Link>
                 </Title>
             </Typography>

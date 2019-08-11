@@ -46,6 +46,7 @@ class Dashboard extends React.Component {
                 api == '/files' && this.callApi('/getfiles', 'saveFiles')
             }
         }).catch(err => {
+            console.log("Server error API-> "+ err)
             this.setState({ loading: false })
             window.alert('Server error API-> ' + api)
         })
@@ -81,9 +82,7 @@ class Dashboard extends React.Component {
         const formData = new FormData()
         Object.keys(this.state.files).forEach((key) => {
             const file = this.state.files[key]
-            console.log(file)
             var path = (window.URL || window.webkitURL).createObjectURL(file);
-            console.log(path)
             formData.append(key, new Blob([file], { type: file.type }), file.name || 'file')
         })
         this.callApi('/files', 'resData', 'POST', formData, true)
@@ -181,7 +180,7 @@ class Dashboard extends React.Component {
                                     <>
                                         <Grid item xs={12}>
                                             <Paper className={this.props.classes.paper}>
-                                                <Graphs fileData={value} type="Line" getFileSize={this.getFileSize} />
+                                                <Graphs fileData={value} type="Line" size={this.getFileSize(value.file_size)} />
                                                 <Graphs fileData={value} type="Area" />
                                             </Paper>
                                         </Grid>
