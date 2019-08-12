@@ -3,24 +3,13 @@ var fs = require('fs')
 var multer = require('multer')
 var path = require('path');
 var bodyParser = require('body-parser')
-const mongoose = require('mongoose');
-const Constants = require('./Constant');
-const winston = require('./winstonlog')
-var validation = require('./validation')
+const constants = require('./helper/constant')
+const winston = require('./helper/winstonlog')
+var validation = require('./helper/validation')
+var dbConnection = require('./helper/dbConnection')
 
-async function connectDB() {
-	try {
-		let check = await mongoose.connect(Constants.dburl, { useNewUrlParser: true });
-		console.log(check);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-connectDB();
-
+dbConnection.connectDB();
 const FileModel = require('./models/index');
-
 
 var webpack = require('webpack')
 var webpackDevMiddleware = require('webpack-dev-middleware')
@@ -166,7 +155,6 @@ app.get('/deleteAll', function (req, res, next) {
 			winston.error('Error occured while inserting data ' + err);
 		})
 })
-
-app.listen(3009, function () {
-	console.log('Starting react-files demo on port 3009')
+app.listen(constants.port, function () {
+	console.log('Starting react-files demo on port ' + constants.port)
 })

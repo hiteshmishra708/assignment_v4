@@ -3,6 +3,8 @@ Assignment
 
 > Node.js + React.js + Charts.js + Material-UI And MongoDB
 
+## Dev Server: http://35.200.132.218:3009/
+
 ## Installation
 
 Install from NPM and include it in your own React build process (using [Browserify](http://browserify.org), [Webpack](http://webpack.github.io/), etc).
@@ -21,15 +23,9 @@ npm start
 
 Then visit http://localhost:3009/
 
-## Update MongoDB URL
+## Update MongoDB URL or Port
 ```
-vi Constant.js
-```
-
-### Start
-
-```
-npm start
+vi helper/Constant.js
 ```
 
-### http://35.200.132.218:3009/
+### Max file size: 200MB

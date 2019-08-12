@@ -2,7 +2,7 @@
   "name": "Assignment",
   "version": "2.4.8",
   "main": "dist/index.js",
-  "description": "node.js + React.js",
+  "description": "Node.js + React.js + Charts.js + Material-UI And MongoDB",
   "scripts": {
     "build": "webpack",
     "dev": "node server.js"
