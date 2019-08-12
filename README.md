@@ -19,7 +19,7 @@ Then:
 npm start
 ```
 
-Then visit http://localhost:8080/
+Then visit http://localhost:3009/
 
 ## Update MongoDB URL
 ```

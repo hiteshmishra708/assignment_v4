@@ -101,12 +101,10 @@ app.post('/files', upload.any(), async function (req, res, next) {
 				});
 			}
 			if(tsKey && valKey) {
-				for (let i=0; i<records.length; i++) {
-					element = records[i]
-					let lsKey = new Date(element[tsKey]).toISOString().slice(0, 10)
-					if(Object.keys(fileObj.data).indexOf(lsKey) == -1) {
-						fileObj.data[lsKey] = element[valKey]
-					}
+				let i = records.length; 
+				while(i--) {
+					let lsKey = new Date((records[i])[tsKey]).toISOString().slice(0, 10)
+					fileObj.data[lsKey] = (records[i])[valKey]
 				}
 			} else {
 				fileObj['tsKey'] = tsKey? tsKey: 'failed to get timestamp col'
@@ -125,11 +123,12 @@ app.post('/files', upload.any(), async function (req, res, next) {
 		'status': true,
 		'data': resData
 	}
+	console.log(response)
 	res.status(200).json(response)
 })
 
 app.get('/getfiles', function (req, res, next) {
-	FileModel.find({}).select({ 'file_name': 1, '_id': 1, 'file_size': 1})
+	FileModel.find({}).sort({_id: -1}).select({ 'file_name': 1, '_id': 1, 'file_size': 1})
 		.then(async resData => {
 			let response = {
 				'status': true,
@@ -175,5 +174,5 @@ app.get('/deleteAll', function (req, res, next) {
 })
 
 app.listen(3009, function () {
-	console.log('Starting react-files demo on port 80')
+	console.log('Starting react-files demo on port 3009')
 })
