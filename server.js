@@ -100,16 +100,10 @@ app.post('/files', upload.any(), async function (req, res, next) {
 					if (!valKey) valKey = validation.isValidValue(element, key)? key: null
 				});
 			}
-			if(tsKey && valKey) {
-				let i = records.length; 
-				while(i--) {
-					let lsKey = new Date((records[i])[tsKey]).toISOString().slice(0, 10)
-					fileObj.data[lsKey] = (records[i])[valKey]
-				}
-			} else {
-				fileObj['tsKey'] = tsKey? tsKey: 'failed to get timestamp col'
-				fileObj['valKey'] = valKey? tsKey: 'failed to get value col'
-			}
+			let i = records.length; 
+			while(i--) fileObj.data[new Date((records[i])[tsKey]).toISOString().slice(0, 10)] = (records[i])[valKey]
+			fileObj['tsKey'] = tsKey? tsKey: 'failed to get timestamp col'
+			fileObj['valKey'] = valKey? tsKey: 'failed to get value col'
 			fileObj['data'] = fileObj.data
 			saveFileData(fileObj)
 		} catch (err) {
