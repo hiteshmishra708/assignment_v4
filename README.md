@@ -3,7 +3,7 @@ Assignment
 
 > Node.js + React.js + Charts.js + Material-UI And MongoDB
 
-## Dev Server: http://35.200.132.218:3009/
+## Dev Server: http://35.200.132.218:3003/
 ### Upload files less than 100MB on the dev server and for testing more than 100MB files please setup the application on local system
 
 ## Installation
